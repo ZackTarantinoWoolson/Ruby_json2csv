@@ -28,38 +28,48 @@ def create_csv(data_hash_array, output_location)
   end
 
 
-file=File.read('JointVentures_Data_Json.json')
-origJson= JSON.parse(file)
+file=File.read('example_data/response copy.json')
 
-sessions=[]
+origJson= JSON.parse(file, symbolize_names: true)
 
-origJson["profiles"].each do |ses|
-    sessions<<ses
+# p origJson[:profile][:attributes].respond_to?('keys')
+
+# p origJson[:profiles][0].class
+# p origJson[:profiles].kind_of?(Array)
+
+origJson.keys.each do |key|
+    # p origJson[key].keys
 end
 
-sessions.each do |ses|
-    p ses["attributes"].empty?
-    unless ses["attributes"].empty?
-      ses["legacy_id_ne_attribute"]=ses["attributes"]["legacy_id_ne_attribute"]
-ses["cgl_identity_name"]=ses["attributes"]["cgl_identity_name"]
-ses["cgl_date_of_last_validation"]=ses["attributes"]["cgl_date_of_last_validation"]
-ses["cgl_date_of_next_validation"]=ses["attributes"]["cgl_date_of_next_validation"]
-ses["cgl_firstname"]=ses["attributes"]["cgl_firstname"]
-ses["cgl_lastname"]=ses["attributes"]["cgl_lastname"]
-ses["cgl_position_description"]=ses["attributes"]["cgl_position_description"]
-ses["cgl_position_title"]=ses["attributes"]["cgl_position_title"]
-ses["personal_identity_type"]=ses["attributes"]["personal_identity_type"]
-ses["cgl_businessfunction_code"]=ses["attributes"]["cgl_businessfunction_code"]
-ses["cgl_businessfunction_name"]=ses["attributes"]["cgl_businessfunction_name"]
-ses["cgl_nonhr_department"]=ses["attributes"]["cgl_nonhr_department"]
-ses["cgl_jointventure_name"]=ses["attributes"]["cgl_jointventure_name"]
-ses["cgl_nonhr_location"]=ses["attributes"]["cgl_nonhr_location"]
-ses["cgl_manager_username"]=ses["attributes"]["cgl_manager_username"]
-ses["cgl_manager_name"]=ses["attributes"]["cgl_manager_name"]
-ses["cgl_termination_date"]=ses["attributes"]["cgl_termination_date"]
-ses["personal_type"]=ses["attributes"]["personal_type"]
-ses["cgl_location_type"]=ses["attributes"]["cgl_location_type"]
-    end
-end
+# sessions=[]
 
-create_csv(sessions, @output_location)
+# origJson["profiles"].each do |ses|
+#     sessions<<ses
+# end
+
+# sessions.each do |ses|
+#     p ses["attributes"].empty?
+#     unless ses["attributes"].empty?
+#       ses["legacy_id_ne_attribute"]=ses["attributes"]["legacy_id_ne_attribute"]
+# ses["cgl_identity_name"]=ses["attributes"]["cgl_identity_name"]
+# ses["cgl_date_of_last_validation"]=ses["attributes"]["cgl_date_of_last_validation"]
+# ses["cgl_date_of_next_validation"]=ses["attributes"]["cgl_date_of_next_validation"]
+# ses["cgl_firstname"]=ses["attributes"]["cgl_firstname"]
+# ses["cgl_lastname"]=ses["attributes"]["cgl_lastname"]
+# ses["cgl_position_description"]=ses["attributes"]["cgl_position_description"]
+# ses["cgl_position_title"]=ses["attributes"]["cgl_position_title"]
+# ses["personal_identity_type"]=ses["attributes"]["personal_identity_type"]
+# ses["cgl_businessfunction_code"]=ses["attributes"]["cgl_businessfunction_code"]
+# ses["cgl_businessfunction_name"]=ses["attributes"]["cgl_businessfunction_name"]
+# ses["cgl_nonhr_department"]=ses["attributes"]["cgl_nonhr_department"]
+# ses["cgl_jointventure_name"]=ses["attributes"]["cgl_jointventure_name"]
+# ses["cgl_nonhr_location"]=ses["attributes"]["cgl_nonhr_location"]
+# ses["cgl_manager_username"]=ses["attributes"]["cgl_manager_username"]
+# ses["cgl_manager_name"]=ses["attributes"]["cgl_manager_name"]
+# ses["cgl_termination_date"]=ses["attributes"]["cgl_termination_date"]
+# ses["personal_type"]=ses["attributes"]["personal_type"]
+# ses["cgl_location_type"]=ses["attributes"]["cgl_location_type"]
+#     end
+# end
+
+# create_csv(sessions, @output_location)
