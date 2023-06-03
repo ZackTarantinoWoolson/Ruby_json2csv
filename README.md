@@ -5,7 +5,7 @@ For each top-level nested key, a different CSV is generated. (Or can be selected
 ## TODO
 - [x] Parse JSON and find all Keys for the file
 - [x] Set CSV headers based on all nested keys
-- [ ] Flatten nested data 
-- [ ] Create CSV based on flattened data
+- [x] Flatten nested data 
+- [x] Create CSV based on flattened data
 - [ ] Remove hardcoding and use command line arguments for origin file and destination
 - [ ] Add linter
