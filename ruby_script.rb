@@ -2,7 +2,7 @@ require "csv"
 require "json"
 
 # Location to save script output. Must be csv format. (Default: "data.csv")
-@Output_Location = "test.csv"
+# @Output_Location = "test#{Time.now.to_i}.csv"
 
 # Headers for the final CSV, in order.
 
@@ -10,13 +10,16 @@ require "json"
 @Top_Level_Keys = Hash.new
 
 
-def create_csv(data_hash_array, csv_headers)
+def create_csv(data_hash_array, title_key, csv_headers)
   csv_config = {
     write_headers: true,
     force_quotes: true,
     encoding: "utf-8",
   }
-  csv_file = CSV.open(@Output_Location, "w", :write_headers => true, :force_quotes => true, :encoding => "utf-8") do |csv|
+
+  output_location="output_files/#{title_key}_#{Time.now.to_i}.csv"
+
+  csv_file = CSV.open(output_location, "w", :write_headers => true, :force_quotes => true, :encoding => "utf-8") do |csv|
     csv.to_io.write "\uFEFF"
     csv << csv_headers
     data_hash_array.each do |r|
@@ -130,7 +133,8 @@ json_file = JSON.parse(file, symbolize_names: true)
   # p all_keys
 
 
-  build_data_hash(json_file[key],csv_headers)
+  data_hash_array=build_data_hash(json_file[key],csv_headers)
+  create_csv(data_hash_array, key, csv_headers)
 
   # p csv_headers
 
