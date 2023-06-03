@@ -60,31 +60,21 @@ def build_data_hash(json, csv_headers)
     json.each do |ele|
 
       flattened_array= ele.flatten_nests_and_save_paths
+      flattened_array=flattened_array.transform_keys(&:to_s)
 
       # build list of all keys to use for csv headers
-      flattened_array.each do |k,v|
-        csv_headers << k.to_s
-      end
+      flattened_array.each do |k,v| csv_headers << k end
 
       csv_data<<flattened_array
 
       csv_headers.uniq!
-
-
-      # all_keys.each do |key|
-      #   # p key
-      #   # p ele
-      #   # p ele.include?(key)
-      #   # p ele.find { |k,v| v.include?(key) }.first
-      # end
     end
   else
-    flattened_array= json.flatten_nests_and_save_paths
+      flattened_array= json.flatten_nests_and_save_paths
+      flattened_array=flattened_array.transform_keys(&:to_s)
 
       # build list of all keys to use for csv headers
-      flattened_array.each do |k,v|
-        csv_headers << k.to_s
-      end
+      flattened_array.each do |k,v| csv_headers << k end
 
       csv_data<<flattened_array
 
@@ -140,8 +130,7 @@ json_file = JSON.parse(file, symbolize_names: true)
   # p all_keys
 
 
-  csv_data=build_data_hash(json_file[key],csv_headers)
-  p csv_data
+  build_data_hash(json_file[key],csv_headers)
 
   # p csv_headers
 
