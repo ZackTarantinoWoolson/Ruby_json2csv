@@ -5,7 +5,6 @@ require "json"
 @Output_Location = "test.csv"
 
 # Headers for the final CSV, in order.
-# @CSV_Headers = Array.new
 
 # All Top Level Keys of the JSON file
 @Top_Level_Keys = Hash.new
@@ -30,12 +29,12 @@ def create_csv(data_hash_array, csv_headers)
   end
 end
 
-def check_if_nested(json,csv_headers)
+def find_all_nested(json,all_keys)
   if(json.kind_of?(Array))
     # p "is array"
 
     json.each do |element|
-      check_if_nested(element, csv_headers)
+      find_all_nested(element, all_keys)
     end
   else
     # p "is not array"
@@ -45,13 +44,26 @@ def check_if_nested(json,csv_headers)
 
       json.keys.each do |key|
         # p "in each |   #{key}"
-        csv_headers << key.to_s
-        check_if_nested(json[key],csv_headers)
+        all_keys << key
+        find_all_nested(json[key],all_keys)
       end
 
     else
       # p 'does not resposnd'
     end
+  end
+end
+
+def make_csv_headers(all_keys,csv_headers)
+  all_keys.each do |key|
+    csv_headers << key.to_s
+  end
+end
+
+def build_data_hash(json, csv_headers)
+  csv_headers.each do |key|
+    p json
+    # json.find {|h1| p h1[key]}
   end
 end
 
@@ -64,10 +76,16 @@ json_file = JSON.parse(file, symbolize_names: true)
 # Create CSV for each top level key
 @Top_Level_Keys.each do |key|
   csv_headers = Array.new
+  all_keys = Array.new
 
-  check_if_nested(json_file[key], csv_headers)
+  find_all_nested(json_file[key], all_keys)
+  all_keys.uniq!
 
-  csv_headers.uniq!
+  make_csv_headers(all_keys,csv_headers)
+
+  build_data_hash(json_file[key],csv_headers)
+
+  # csv_headers.find { |h1| p h1["location_id_ne_attribute"] }
 
 end
 
