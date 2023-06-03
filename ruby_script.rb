@@ -31,55 +31,56 @@ end
 
 def find_all_nested(json,all_keys)
   if(json.kind_of?(Array))
-    # p "is array"
-
     json.each do |element|
       find_all_nested(element, all_keys)
     end
   else
-    # p "is not array"
-
     if(json.respond_to?('keys'))
-      # p 'responds'
-
       json.keys.each do |key|
-        # p "in each |   #{key}"
         all_keys << key
         find_all_nested(json[key],all_keys)
       end
-
-    else
-      # p 'does not resposnd'
     end
   end
 end
 
-def make_csv_headers(all_keys,csv_headers)
-  all_keys.each do |key|
-    csv_headers << key.to_s
-  end
-end
+# def make_csv_headers(all_keys,csv_headers)
+#   all_keys.each do |key|
+#     csv_headers << key.to_s
+#   end
+# end
 
-def build_data_hash(json, all_keys)
-  # p json
+def build_data_hash(json, csv_headers)
+  # p "top of build data hash",json
 
-  if(json.respond_to?('each'))   
+  if(json.kind_of?(Array))   
     json.each do |ele|
 
-      p ele.flatten_nests_and_save_paths
+      flattened_array= ele.flatten_nests_and_save_paths
 
-      all_keys.each do |key|
-        # p key
-        # p ele
-        # p ele.include?(key)
-        # p ele.find { |k,v| v.include?(key) }.first
+      # build list of all keys to use for csv headers
+      flattened_array.each do |k,v|
+        csv_headers << k.to_s
       end
+
+      csv_headers.uniq!
+
+      # all_keys.each do |key|
+      #   # p key
+      #   # p ele
+      #   # p ele.include?(key)
+      #   # p ele.find { |k,v| v.include?(key) }.first
+      # end
     end
   else
-    all_keys.each do |key|
-    
-      # json.find {|h1| p h1[key]}
-    end
+    flattened_array= json.flatten_nests_and_save_paths
+
+      # build list of all keys to use for csv headers
+      flattened_array.each do |k,v|
+        csv_headers << k.to_s
+      end
+
+      csv_headers.uniq!
   end
 end
 
@@ -122,20 +123,23 @@ json_file = JSON.parse(file, symbolize_names: true)
   csv_headers = Array.new
   all_keys = Array.new
 
-  find_all_nested(json_file[key], all_keys)
-  all_keys.uniq!
+  # find_all_nested(json_file[key], all_keys)
+  # all_keys.uniq!
 
-  make_csv_headers(all_keys,csv_headers)
+  # make_csv_headers(all_keys,csv_headers)
   # p all_keys
 
-  build_data_hash(json_file[key],all_keys)
+
+  build_data_hash(json_file[key],csv_headers)
+
+  # p csv_headers
 
   # p json_file[key]
   # p json_file[key].flatten_nests_and_save_paths
 
   # csv_headers.find { |h1| p h1["location_id_ne_attribute"] }
 
-  p '','','',''
+  p '',''
 
 end
 
