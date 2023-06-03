@@ -51,6 +51,9 @@ end
 # end
 
 def build_data_hash(json, csv_headers)
+
+  csv_data = Array.new
+
   # p "top of build data hash",json
 
   if(json.kind_of?(Array))   
@@ -63,7 +66,10 @@ def build_data_hash(json, csv_headers)
         csv_headers << k.to_s
       end
 
+      csv_data<<flattened_array
+
       csv_headers.uniq!
+
 
       # all_keys.each do |key|
       #   # p key
@@ -80,8 +86,12 @@ def build_data_hash(json, csv_headers)
         csv_headers << k.to_s
       end
 
+      csv_data<<flattened_array
+
       csv_headers.uniq!
   end
+
+  csv_data
 end
 
 module Enumerable
@@ -130,7 +140,8 @@ json_file = JSON.parse(file, symbolize_names: true)
   # p all_keys
 
 
-  build_data_hash(json_file[key],csv_headers)
+  csv_data=build_data_hash(json_file[key],csv_headers)
+  p csv_data
 
   # p csv_headers
 
