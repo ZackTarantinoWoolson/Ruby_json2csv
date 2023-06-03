@@ -60,10 +60,23 @@ def make_csv_headers(all_keys,csv_headers)
   end
 end
 
-def build_data_hash(json, csv_headers)
-  csv_headers.each do |key|
-    p json
-    # json.find {|h1| p h1[key]}
+def build_data_hash(json, all_keys)
+  # p json
+
+  if(json.respond_to?('each'))
+    json.each do |ele|
+      all_keys.each do |key|
+        p key
+        # p ele
+        p ele.include?(key)
+        # p ele.find { |k,v| v.include?(key) }.first
+      end
+    end
+  else
+    all_keys.each do |key|
+    
+      # json.find {|h1| p h1[key]}
+    end
   end
 end
 
@@ -82,8 +95,9 @@ json_file = JSON.parse(file, symbolize_names: true)
   all_keys.uniq!
 
   make_csv_headers(all_keys,csv_headers)
+  # p all_keys
 
-  build_data_hash(json_file[key],csv_headers)
+  build_data_hash(json_file[key],all_keys)
 
   # csv_headers.find { |h1| p h1["location_id_ne_attribute"] }
 
