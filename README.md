@@ -1,6 +1,8 @@
 ## A CLI tool to convert JSON files to CSVs 
 
-For each top-level nested key, a different CSV is generated. (Or can be selected)
+For each top-level nested key, a different CSV is generated.
+
+(Right now this is just a Ruby script for proof of concept. Working on the CLI bit ) 
 
 ## TODO
 - [x] Parse JSON and find all Keys for the file
