@@ -2,26 +2,27 @@ require "csv"
 require "json"
 
 # Location to save script output. Must be csv format. (Default: "data.csv")
-@output_location = "dives.csv"
+@Output_Location = "test.csv"
 
 # Headers for the final CSV, in order.
-@CSV_Headers = ["id", "profile_type_id", "uid", "name", "status", "legacy_id_ne_attribute", "cgl_identity_name", "cgl_date_of_last_validation", "cgl_date_of_next_validation", "cgl_firstname", "cgl_lastname", "cgl_position_description", "cgl_position_title", "personal_identity_type", "cgl_businessfunction_code", "cgl_businessfunction_name", "cgl_nonhr_department", "cgl_jointventure_name", "cgl_nonhr_location", "cgl_manager_username", "cgl_manager_name", "cgl_termination_date", "personal_type", "cgl_location_type"]
+# @CSV_Headers = Array.new
 
+# All Top Level Keys of the JSON file
 @Top_Level_Keys = Hash.new
 
 
-def create_csv(data_hash_array, output_location)
+def create_csv(data_hash_array, csv_headers)
   csv_config = {
     write_headers: true,
     force_quotes: true,
     encoding: "utf-8",
   }
-  csv_file = CSV.open(output_location, "w", :write_headers => true, :force_quotes => true, :encoding => "utf-8") do |csv|
+  csv_file = CSV.open(@Output_Location, "w", :write_headers => true, :force_quotes => true, :encoding => "utf-8") do |csv|
     csv.to_io.write "\uFEFF"
-    csv << @CSV_Headers
+    csv << csv_headers
     data_hash_array.each do |r|
       row_arr = []
-      @CSV_Headers.each do |h|
+      csv_headers.each do |h|
         row_arr << "#{r[h]}"
       end
       csv << row_arr.dup
@@ -29,12 +30,12 @@ def create_csv(data_hash_array, output_location)
   end
 end
 
-def check_if_nested(json)
+def check_if_nested(json,csv_headers)
   if(json.kind_of?(Array))
     # p "is array"
 
     json.each do |element|
-      check_if_nested(element)
+      check_if_nested(element, csv_headers)
     end
   else
     # p "is not array"
@@ -44,7 +45,8 @@ def check_if_nested(json)
 
       json.keys.each do |key|
         # p "in each |   #{key}"
-        check_if_nested(json[key])
+        csv_headers << key.to_s
+        check_if_nested(json[key],csv_headers)
       end
 
     else
@@ -57,7 +59,18 @@ file = File.read("example_data/response.json")
 json_file = JSON.parse(file, symbolize_names: true)
 @Top_Level_Keys= json_file.keys
 
-check_if_nested(json_file)
+# For each top level key, loop through and find all other keys.
+# Use keys to build column headers
+# Create CSV for each top level key
+@Top_Level_Keys.each do |key|
+  csv_headers = Array.new
+
+  check_if_nested(json_file[key], csv_headers)
+
+  csv_headers.uniq!
+
+end
+
 
 
 
