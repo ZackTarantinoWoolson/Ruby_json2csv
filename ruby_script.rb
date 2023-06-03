@@ -63,12 +63,15 @@ end
 def build_data_hash(json, all_keys)
   # p json
 
-  if(json.respond_to?('each'))
+  if(json.respond_to?('each'))   
     json.each do |ele|
+
+      p ele.flatten_nests_and_save_paths
+
       all_keys.each do |key|
-        p key
+        # p key
         # p ele
-        p ele.include?(key)
+        # p ele.include?(key)
         # p ele.find { |k,v| v.include?(key) }.first
       end
     end
@@ -80,6 +83,31 @@ def build_data_hash(json, all_keys)
   end
 end
 
+module Enumerable
+  def flatten_nests_and_save_paths(path_prefix = nil)
+    result = {}
+
+    self.each_with_index do |ele, iter|
+      if ele.kind_of?(Array) then k, v = ele 
+      else  k, v = iter, ele 
+      end
+
+      # Assign the path key name for the later result hash
+      key = path_prefix ? "#{path_prefix}.#{k}" : k 
+
+      if v.kind_of?(Enumerable)
+        # recursive call to flatten child elements
+        result.merge!(v.flatten_nests_and_save_paths(key)) 
+      else
+        result[key] = v
+      end
+    end
+
+    result
+  end
+end
+
+
 file = File.read("example_data/response.json")
 json_file = JSON.parse(file, symbolize_names: true)
 @Top_Level_Keys= json_file.keys
@@ -88,6 +116,9 @@ json_file = JSON.parse(file, symbolize_names: true)
 # Use keys to build column headers
 # Create CSV for each top level key
 @Top_Level_Keys.each do |key|
+
+  p '',key,''
+
   csv_headers = Array.new
   all_keys = Array.new
 
@@ -99,7 +130,12 @@ json_file = JSON.parse(file, symbolize_names: true)
 
   build_data_hash(json_file[key],all_keys)
 
+  # p json_file[key]
+  # p json_file[key].flatten_nests_and_save_paths
+
   # csv_headers.find { |h1| p h1["location_id_ne_attribute"] }
+
+  p '','','',''
 
 end
 
