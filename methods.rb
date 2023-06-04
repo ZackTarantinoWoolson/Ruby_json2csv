@@ -5,14 +5,14 @@ module ConvertJSON
   # All Top Level Keys of the JSON file
   @Top_Level_Keys = Hash.new
 
-  def create_csv(data_hash_array, title_key, csv_headers)
+  def create_csv(data_hash_array, title_key, csv_headers, file_name)
     csv_config = {
       write_headers: true,
       force_quotes: true,
       encoding: "utf-8",
     }
 
-    output_location="output_files/#{title_key}_#{Time.now.to_i}.csv"
+    output_location="output_files/#{file_name}_#{title_key}_#{Time.now.to_i}.csv"
 
     csv_file = CSV.open(output_location, "w", :write_headers => true, :force_quotes => true, :encoding => "utf-8") do |csv|
       csv.to_io.write "\uFEFF"
@@ -115,7 +115,7 @@ module ConvertJSON
 
 
       data_hash_array=build_data_hash(json_file[key],csv_headers)
-      create_csv(data_hash_array, key, csv_headers)
+      create_csv(data_hash_array, key, csv_headers, File.basename(input_file, ".*"))
 
       p "CSV Created.."
     end

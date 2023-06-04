@@ -7,6 +7,7 @@ def process_argv(option)
       puts "This is the help menu."
       puts "  -v Prints the version"
       puts "  -i Enter the Input file name"
+      puts "  -i Enter a Directory that contains multiple json files"
       puts ""
       puts "Usage:"
       puts "  Enter the Input File name like so:"
@@ -17,6 +18,14 @@ def process_argv(option)
       exit
     when "-i"
       ConvertJSON::process_file(ARGV[1])
+      exit
+    when "-f"
+      Dir.foreach(ARGV[1]) do |filename|
+        p filename
+        next if filename == '.' or filename == '..'
+        ConvertJSON::process_file(filename)
+      end
+      exit
     end
 end
 
