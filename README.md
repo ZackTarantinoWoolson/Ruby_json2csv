@@ -9,5 +9,5 @@ For each top-level nested key, a different CSV is generated.
 - [x] Set CSV headers based on all nested keys
 - [x] Flatten nested data 
 - [x] Create CSV based on flattened data
-- [ ] Remove hardcoding and use command line arguments for origin file and destination
+- [x] Remove hardcoding and use command line arguments for origin file
 - [ ] Add linter
