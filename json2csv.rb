@@ -1,4 +1,4 @@
-require_relative 'convert_json_to_csv.rb'
+require_relative 'methods.rb'
 include ConvertJSON
 
 def process_argv(option)
