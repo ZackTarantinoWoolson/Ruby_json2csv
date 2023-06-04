@@ -8,7 +8,14 @@ For each top-level nested key, a different CSV is generated.
 
 Run this with ruby from your command line and pass in a JSON file that you want to convert
 ```
-ruby json2csv.rb -i test.json
+ruby json2csv.rb -i \path\to\file\test.json
+```
+
+This will convert the file to a CSV and drop it into the output_files folder
+
+Or, add a bunch of JSON files to the input_files folder and use the -f option to convert them all
+```
+ruby json2csv.rb -f
 ```
 
 ## TODO
