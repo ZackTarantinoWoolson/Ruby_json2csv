@@ -5,7 +5,7 @@ For each top-level nested key, a different CSV is generated.
 (Right now this is just a Ruby script for proof of concept. Working on the CLI bit ) 
 
 ## Usage
-asd
+
 Run this with ruby from your command line and pass in a JSON file that you want to convert
 ```
 ruby json2csv.rb -i \path\to\file\test.json
