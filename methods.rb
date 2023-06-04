@@ -12,6 +12,10 @@ module ConvertJSON
       encoding: "utf-8",
     }
 
+    unless File.exists?("output_files")
+      Dir.mkdir 'output_files'
+    end
+
     output_location="output_files/#{file_name}_#{title_key}_#{Time.now.to_i}.csv"
 
     csv_file = CSV.open(output_location, "w", :write_headers => true, :force_quotes => true, :encoding => "utf-8") do |csv|
