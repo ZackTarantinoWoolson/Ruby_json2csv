@@ -31,21 +31,6 @@ module ConvertJSON
     end
   end
 
-  def find_all_nested(json,all_keys)
-    if(json.kind_of?(Array))
-      json.each do |element|
-        find_all_nested(element, all_keys)
-      end
-    else
-      if(json.respond_to?('keys'))
-        json.keys.each do |key|
-          all_keys << key
-          find_all_nested(json[key],all_keys)
-        end
-      end
-    end
-  end
-
   def build_data_hash(json, csv_headers)
 
     csv_data = Array.new
@@ -112,7 +97,7 @@ module ConvertJSON
     # Create CSV for each top level key
     @Top_Level_Keys.each do |key|
 
-      p "Creating CSV for #{key}..."
+      puts "Creating CSV for #{key}..."
 
       csv_headers = Array.new
       all_keys = Array.new
@@ -121,9 +106,9 @@ module ConvertJSON
       data_hash_array=build_data_hash(json_file[key],csv_headers)
       create_csv(data_hash_array, key, csv_headers, File.basename(input_file, ".*"))
 
-      p "CSV Created.."
+      puts "CSV Created.."
     end
 
-    p "json2csv complete!"
+    puts "json2csv complete!"
   end
 end
